@@ -3,10 +3,7 @@ package com.brandao.pocbee.service;
 import com.brandao.pocbee.domain.request.PessoaRequest;
 import com.brandao.pocbee.domain.response.PessoaResponse;
 import com.google.api.services.bigquery.Bigquery;
-import com.google.cloud.bigquery.BigQuery;
-import com.google.cloud.bigquery.BigQueryOptions;
-import com.google.cloud.bigquery.FieldValueList;
-import com.google.cloud.bigquery.QueryJobConfiguration;
+import com.google.cloud.bigquery.*;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -19,9 +16,14 @@ public class PessoaService {
         BigQuery bigQuery = BigQueryOptions.getDefaultInstance().getService();
 
        String query = "select * from `pocbee01.poc_bee.pessoas` where CPF =" + cpf;
+       String insert = "insert into `pocbee01.poc_bee.pessoas` values (12321321, \"21312312\", \"2021-09-14\", \"bee@pocbeeeqweqw.com\")";
         PessoaResponse pessoaResponse = new PessoaResponse();
 
         QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(query).build();
+
+        QueryJobConfiguration queryJobConfigurationT = QueryJobConfiguration.newBuilder(insert).build();
+
+        bigQuery.create(JobInfo.of(queryJobConfigurationT));
 
         for(FieldValueList row : bigQuery.query(queryJobConfiguration).iterateAll()){
 
